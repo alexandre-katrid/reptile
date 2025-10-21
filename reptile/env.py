@@ -20,6 +20,7 @@ class EnvironmentSettings:
     env = Environment()
     env.cache = None
     env.globals['str'] = str
+    env.globals['float'] = float
     env.globals['datetime'] = datetime.datetime
     env.globals['date'] = datetime.date
     env.globals['time'] = datetime.time
