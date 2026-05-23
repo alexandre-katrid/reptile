@@ -247,13 +247,13 @@ class TextRenderer:
                 painter.setFont(font)
             flags = cls.textFlags(self)
             if self.valign == VAlign.TOP:
-                rect.setY(rect.y() + self.padding.top)
+                rect.setY(rect.y() + float(self.padding.top or 0))
             elif self.valign == VAlign.BOTTOM:
-                rect.setHeight(rect.height() - self.padding.bottom)
+                rect.setHeight(rect.height() - float(self.padding.bottom or 0))
             if self.halign == HAlign.LEFT:
-                rect.setX(rect.x() + self.padding.left)
+                rect.setX(rect.x() + float(self.padding.left or 0))
             elif self.halign == HAlign.RIGHT:
-                rect.setWidth(rect.width() - self.padding.right)
+                rect.setWidth(rect.width() - float(self.padding.right or 0))
             painter.drawText(rect, flags, self.text)
             # painter.restore()
 
