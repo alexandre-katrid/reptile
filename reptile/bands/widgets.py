@@ -296,6 +296,8 @@ class Image(BandObject):
             self.size_mode = SizeMode.STRETCH
         elif size_mode is not None:
             self.size_mode = size_mode
+        if ds := structure.get('datasource'):
+            self.datasource = ds
 
 
 class LineStyle(enum.IntEnum):
