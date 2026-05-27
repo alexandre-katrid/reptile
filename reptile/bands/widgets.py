@@ -1,4 +1,5 @@
 from typing import Optional, List, TYPE_CHECKING
+import os
 import enum
 import logging
 
@@ -257,7 +258,15 @@ class Image(BandObject):
         img.size_mode = self.size_mode
         if self.field:
             if self._datasource:
-                img.picture = context[self.datasource.name][self.field]
+                picture = context[self.datasource.name][self.field]
+                # check if it's a file path
+                if isinstance(picture, str):
+                    if media_dir := self.parent.page.report.variables.get('media_dir'):
+                        picture = os.path.join(media_dir, picture)
+                    with open(picture, 'rb') as f:
+                        img.picture = f.read()
+                else:
+                    img.picture = picture
             else:
                 try:
                     img.picture = self.parent.page.report.variables[self.field]
