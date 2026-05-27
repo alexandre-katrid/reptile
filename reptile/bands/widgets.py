@@ -296,7 +296,7 @@ class Image(BandObject):
             self.size_mode = SizeMode.STRETCH
         elif size_mode is not None:
             self.size_mode = size_mode
-        if ds := structure.get('datasource'):
+        if ds := structure.get('dataSource'):
             self.datasource = ds
 
 
