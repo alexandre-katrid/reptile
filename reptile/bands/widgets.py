@@ -267,6 +267,8 @@ class Image(BandObject):
                         raise ValueError(f"File not found: {picture}")
                     with open(picture, 'rb') as f:
                         img.picture = f.read()
+                elif not picture:
+                    raise ValueError(f"Picture field '{self.field}' is empty or None")
                 else:
                     img.picture = picture
             else:
