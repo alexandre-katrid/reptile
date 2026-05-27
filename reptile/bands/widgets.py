@@ -261,7 +261,7 @@ class Image(BandObject):
                 picture = context[self.datasource.name][self.field]
                 # check if it's a file path
                 if isinstance(picture, str):
-                    if media_dir := self.parent.page.report.variables.get('media_dir'):
+                    if media_dir := self.parent.page.report.variables.get('MEDIA_DIR'):
                         picture = os.path.join(media_dir, picture)
                     if not os.path.isfile(picture):
                         raise ValueError(f"File not found: {picture}")
