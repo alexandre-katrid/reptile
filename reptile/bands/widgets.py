@@ -263,6 +263,8 @@ class Image(BandObject):
                 if isinstance(picture, str):
                     if media_dir := self.parent.page.report.variables.get('media_dir'):
                         picture = os.path.join(media_dir, picture)
+                    if not os.path.isfile(picture):
+                        raise ValueError(f"File not found: {picture}")
                     with open(picture, 'rb') as f:
                         img.picture = f.read()
                 else:
