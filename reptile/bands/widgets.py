@@ -268,7 +268,7 @@ class Image(BandObject):
                     with open(picture, 'rb') as f:
                         img.picture = f.read()
                 elif not picture:
-                    pass
+                    print(f"Picture field '{self.field}' is empty or None")
                 else:
                     img.picture = picture
             elif self.field in self.parent.page.report.variables:
