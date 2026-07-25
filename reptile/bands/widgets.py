@@ -268,14 +268,13 @@ class Image(BandObject):
                     with open(picture, 'rb') as f:
                         img.picture = f.read()
                 elif not picture:
-                    raise ValueError(f"Picture field '{self.field}' is empty or None")
+                    pass
                 else:
                     img.picture = picture
+            elif self.field in self.parent.page.report.variables:
+                img.picture = self.parent.page.report.variables[self.field]
             else:
-                try:
-                    img.picture = self.parent.page.report.variables[self.field]
-                except KeyError:
-                    print('Image not found for field', self.field)
+                raise ValueError(f"Image not found for field '{self.field}'")
         else:
             img.picture = self.picture
         stream.append(img)
