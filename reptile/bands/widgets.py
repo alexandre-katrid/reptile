@@ -274,7 +274,7 @@ class Image(BandObject):
             elif self.field in self.parent.page.report.variables:
                 img.picture = self.parent.page.report.variables[self.field]
             else:
-                raise ValueError(f"Image not found for field '{self.field}'")
+                print(f"Image not found for field '{self.field}'")
         else:
             img.picture = self.picture
         stream.append(img)
