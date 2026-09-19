@@ -1,13 +1,32 @@
 import tempfile
 
 from PySide6.QtGui import (
-    QPainter, QFont, QGuiApplication, QPageSize, QPageLayout, QPdfWriter, QPen, QColor, QTextOption,
+    QPainter,
+    QFont,
+    QGuiApplication,
+    QPageSize,
+    QPageLayout,
+    QPdfWriter,
+    QPen,
+    QColor,
+    QTextOption,
 )
-from PySide6.QtPrintSupport import QPrinter
-from PySide6.QtCore import QMarginsF, QSizeF, QSize, QPoint, Qt, QRectF
+from PySide6.QtCore import QMarginsF, QSizeF, Qt, QRectF
 
-from reptile.runtime import PreparedBand, PreparedText, PreparedImage, PreparedLine, PreparedBarcode
-from reptile.engines.qt import BandRenderer, TextRenderer, ImageRenderer, LineRenderer, BarcodeRenderer
+from reptile.runtime import (
+    PreparedBand,
+    PreparedText,
+    PreparedImage,
+    PreparedLine,
+    PreparedBarcode,
+)
+from reptile.engines.qt import (
+    BandRenderer,
+    TextRenderer,
+    ImageRenderer,
+    LineRenderer,
+    BarcodeRenderer,
+)
 from reptile.bands import Watermark
 from reptile.core.units import mm
 
@@ -31,10 +50,14 @@ class PDF:
         pages = self.document.pages
         if pages:
             page = pages[0]
-            self.printer.setPageSize(QPageSize(QSizeF(page.width / mm, page.height / mm), QPageSize.Millimeter))
+            self.printer.setPageSize(
+                QPageSize(
+                    QSizeF(page.width / mm, page.height / mm), QPageSize.Millimeter
+                )
+            )
         self.painter = QPainter()
-        self.painter.setFont(QFont('Helvetica', 9))
         self.painter.begin(self.printer)
+        self.painter.setFont(QFont('Helvetica', 9))
         self._isFirstPage = True
         for page in pages:
             self.exportPage(page)
@@ -91,4 +114,3 @@ class PDF:
                 LineRenderer.draw(band.left, band.top, obj, self.painter)
             elif isinstance(obj, PreparedBarcode):
                 BarcodeRenderer.draw(band.left, band.top, obj, self.painter)
-

@@ -1,10 +1,18 @@
 import os
 from unittest import TestCase
-from reptile.bands import Report, DataBand, DataSource, Text, Page, Band, Image, SizeMode
+from reptile.bands import (
+    Report,
+    DataBand,
+    DataSource,
+    Text,
+    Page,
+    Band,
+    Image,
+    SizeMode,
+)
 from reptile.exports import pdf
 
-
-DIR_NAME: str = os.path.dirname(__file__)
+from base_tests import BASE_DIR, TEMPLATE_DIR, OUTPUT_DIR
 
 
 class ImageTestCase(TestCase):
@@ -13,7 +21,7 @@ class ImageTestCase(TestCase):
         page: Page = rep.new_page()
         band = Band()
         page.add_band(band)
-        with open(os.path.join(DIR_NAME, 'test_img.png'), 'rb') as f:
+        with open(os.path.join(TEMPLATE_DIR, 'test_img.png'), 'rb') as f:
             img_buf = f.read()
         # normal size mode
         img = Image()
@@ -58,11 +66,11 @@ class ImageTestCase(TestCase):
         band.add_object(img)
 
         doc = rep.prepare()
-        pdf.PDF(doc).export(os.path.join(DIR_NAME, 'reports', 'test_img.pdf'))
+        pdf.PDF(doc).export(os.path.join(OUTPUT_DIR, 'test_img.pdf'))
 
     def test_img_field(self):
         rep = Report()
-        rep.variables['media_dir'] = DIR_NAME
+        rep.variables['MEDIA_DIR'] = TEMPLATE_DIR
         page: Page = rep.add_page()
         band = page.add_band(Band())
         ds = DataSource({'test_img': 'test_img.png'}, name='ds1')
@@ -76,4 +84,4 @@ class ImageTestCase(TestCase):
         img.datasource = ds
         band.add_object(img)
         doc = rep.prepare()
-        pdf.PDF(doc).export(os.path.join(DIR_NAME, 'reports', 'test2.pdf'))
+        pdf.PDF(doc).export(os.path.join(OUTPUT_DIR, 'test2.pdf'))

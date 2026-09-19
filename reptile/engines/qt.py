@@ -1,19 +1,39 @@
 import os
-from PySide6.QtGui import QPageSize, QTextDocument, QFont, Qt, QPainter, QPixmap, QFontMetrics, QPen, QColor, QFontDatabase
+from PySide6.QtGui import (
+    QPageSize,
+    QTextDocument,
+    QFont,
+    Qt,
+    QPainter,
+    QPixmap,
+    QFontMetrics,
+    QPen,
+    QColor,
+    QFontDatabase,
+)
 from PySide6.QtCore import QSize, QRectF, QRect, QLine, QPoint, Qt as QtCore
 
 from reptile.runtime.stream import (
-    PreparedText, PreparedPage, PreparedBand, PreparedImage, PreparedLine, SizeMode, PreparedBarcode,
+    PreparedText,
+    PreparedPage,
+    PreparedBand,
+    PreparedImage,
+    PreparedLine,
+    SizeMode,
+    PreparedBarcode,
 )
 from reptile.bands.widgets import Text, HAlign, VAlign
 
 
 TAG_REGISTRY = {}
 
+os.environ['QT_QPA_PLATFORM'] = 'offscreen'
+
 
 def calc_text_size(self, obj: PreparedText):
     from PySide6.QtGui import QFont, QFontMetrics
     from PySide6.QtCore import Qt
+
     font = QFont(obj.font_name)
     if obj.font_size:
         font.setPointSizeF(obj.font_size)
@@ -28,6 +48,7 @@ def calc_text_size(self, obj: PreparedText):
     del font
     del fm
     return obj.width, height
+
 
 Text.calc_size = calc_text_size
 
@@ -65,7 +86,9 @@ class PageRenderer:
             #     page.y += b.height
             page.bands.append(b)
 
-    def new_page(self,):
+    def new_page(
+        self,
+    ):
         page = PageRenderer.__new__(PageRenderer)
         page.bands = []
         page.margin = self.margin
@@ -149,7 +172,7 @@ class TextRenderer:
         if info.fontBold:
             self.font.setBold(info.fontBold)
         if info.fontItalic:
-            self.font.setItalic(info.fontItalic) 
+            self.font.setItalic(info.fontItalic)
         self.font.setPointSize(info.fontSize)
         self.v_align = v_align_map.get(info.vAlign)
         self.h_align = h_align_map.get(info.hAlign)
@@ -207,7 +230,9 @@ class TextRenderer:
         h = self.height
         tx = self.left + x
         ty = self.top + y
-        border_width = self.border.width - .5 if self.border.width >= 1 else self.border.width
+        border_width = (
+            self.border.width - 0.5 if self.border.width >= 1 else self.border.width
+        )
         if border_width:
             if self.border.right:
                 w -= self.border.width
@@ -226,9 +251,23 @@ class TextRenderer:
         if self.border and self.border.color is not None:
             painter.save()
             painter.setBrush(Qt.BrushStyle.SolidPattern)
-            pen = QPen(QColor(self.border.color), border_width, pen_style_map.get(self.border.style, pen_style_map.get(self.border.style)))
+            pen = QPen(
+                QColor(self.border.color),
+                border_width,
+                pen_style_map.get(
+                    self.border.style, pen_style_map.get(self.border.style)
+                ),
+            )
             painter.setPen(pen)
-            painter.drawLines(cls.getLines(self, self.left + x, self.top + y, self.left + self.width + x, self.top + y + self.height))
+            painter.drawLines(
+                cls.getLines(
+                    self,
+                    self.left + x,
+                    self.top + y,
+                    self.left + self.width + x,
+                    self.top + y + self.height,
+                )
+            )
             painter.restore()
             rect.setX(rect.x() + self.border.width)
             rect.setY(rect.y() + self.border.width)
@@ -280,7 +319,9 @@ class ImageRenderer:
         painter.translate(x + obj.left, y + obj.top)
         if obj.size_mode == SizeMode.ZOOM:
             painter.drawPixmap(
-                0, 0, img.scaled(obj.width, obj.height, Qt.AspectRatioMode.KeepAspectRatio)
+                0,
+                0,
+                img.scaled(obj.width, obj.height, Qt.AspectRatioMode.KeepAspectRatio),
             )
         elif obj.size_mode == SizeMode.STRETCH:
             painter.drawPixmap(0, 0, obj.width, obj.height, img)
@@ -303,6 +344,7 @@ PEN_STYLE_MAP = {
     1: Qt.PenStyle.DashLine,
     2: Qt.PenStyle.DotLine,
 }
+
 
 class LineRenderer:
     @classmethod

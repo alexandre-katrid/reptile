@@ -79,9 +79,13 @@ class Report:
             if page.name == item:
                 return page
 
-    def add_page(self, page: BasePage):
+    def add_page(self, page: BasePage = None):
+        if page is None:
+            from reptile.bands import Page
+            page = Page()
         self.pages.append(page)
         page.report = self
+        return page
 
     def new_page(self) -> BasePage:
         from reptile.bands import Page

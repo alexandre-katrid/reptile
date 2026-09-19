@@ -97,6 +97,7 @@ class Page(BasePage):
         if band.page != self:
             self.bands.append(band)
             band.page = self
+        return band
 
     def prepare(self, stream: List):
         self._context = self.report._context
@@ -142,7 +143,8 @@ class Page(BasePage):
         if self._current_page is not None:
             self.end_page(self._current_page, context)
         page = PreparedPage(self.height, self.width, self.margin)
-        page.watermark = self.watermark
+        if self.watermark.enabled:
+            page.watermark = self.watermark
         self.report.page_count += 1
         page.index = self.report.page_count
         context['page_index'] = page.index

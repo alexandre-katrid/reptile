@@ -2,9 +2,7 @@ import warnings
 from io import BytesIO
 from typing import List
 
-from barcode import Code128, ITF
-from barcode.writer import SVGWriter, ImageWriter
-
+# from barcode import ITF
 from reptile import EnvironmentSettings
 from reptile.bands.widgets import BandObject, TAG_REGISTRY
 
@@ -75,11 +73,6 @@ class Barcode(BandObject):
             if self.barcode_type == 'code128' or self.barcode_type == 'code128C':
                 print('barcode', code)
                 img.data = code128.get_barcode(code)
-            elif self.barcode_type == 'ITF-14':
-                s = BytesIO()
-                ITF(code, writer=ImageWriter()).write(s, options={'write_text': False, 'quiet_zone': 5})
-                s.seek(0)
-                img.picture = s.read()
             stream.append(img)
 
     @property
